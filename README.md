@@ -38,8 +38,8 @@ Assume you want to update the DNS A record for `homelab.example.com` whenever yo
 export CLOUDFLARE_ZONE_ID='ZONE_ID'
 export CLOUDFLARE_API_READ_TOKEN='API_TOKEN'
 
-curl -X GET "https://api.cloudflare.com/client/v4/zones/${zone_id}/dns_records" \
-     -H "Authorization: Bearer ${api_token}" \
+curl -X GET "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE_ID}/dns_records" \
+     -H "Authorization: Bearer ${CLOUDFLARE_API_READ_TOKEN}" \
      -H "Content-Type:application/json" | jq
 ```
 
