@@ -1,0 +1,57 @@
+name: Build and release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        goos: [linux, darwin, windows]
+        goarch: [amd64, arm, arm64]
+        exclude:
+          - goos: darwin
+            goarch: arm
+          - goos: windows
+            goarch: arm
+          
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.23'
+
+      - name: Build
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+        run: |
+          go build -o cf-ddns ./...
+          # Strip the binary for Linux and macOS
+          if [[ "${{ matrix.goos }}" != "windows" ]]; then
+            strip cf-ddns
+          fi
+
+      - name: Package Binary
+        run: |
+          if [[ "${{ matrix.goos }}" == "windows" ]]; then
+            zip cf-ddns-${{ matrix.goos }}-${{ matrix.goarch }}.zip cf-ddns.exe README.md LICENSE
+          else
+            tar -czvf cf-ddns-${{ matrix.goos }}-${{ matrix.goarch }}.tar.gz cf-ddns README.md LICENSE
+          fi
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cf-ddns-${{ matrix.goos }}-${{ matrix.goarch }}
+          path: |
+            cf-ddns-${{ matrix.goos }}-${{ matrix.goarch }}.zip
+            cf-ddns-${{ matrix.goos }}-${{ matrix.goarch }}.tar.gz
