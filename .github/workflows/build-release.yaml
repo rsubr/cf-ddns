@@ -34,11 +34,8 @@ jobs:
           GOOS: ${{ matrix.goos }}
           GOARCH: ${{ matrix.goarch }}
         run: |
-          go build -o cf-ddns ./...
-          # Strip the binary for Linux and macOS
-          if [[ "${{ matrix.goos }}" != "windows" ]]; then
-            strip cf-ddns
-          fi
+          go build -ldflags "-s -w" ./...
+
 
       - name: Package Binary
         run: |
