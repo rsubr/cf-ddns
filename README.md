@@ -6,6 +6,13 @@
 
 `cf-ddns` first checks if the DDNS IP is updated, and only then calls the Cloudflare API if required making it safe to run `cf-ddns` as a repeated cron job. The application is completely stateless and does not use any local storage.
 
+## How Does This Work?
+
+1. Get the public IP of the client using [Cloudflare Trace](https://cloudflare.com/cdn-cgi/trace).
+
+2. Get the current IP address of the DNS record using [Cloudflare DoH](https://developers.cloudflare.com/1.1.1.1/encryption/dns-over-https/make-api-requests/dns-json/).
+
+3. If the public IP and current IP are different, updated the DNS A record using the [Cloudflare API](https://developers.cloudflare.com/api/operations/dns-records-for-a-zone-patch-dns-record).
 
 ## Using
 
@@ -52,6 +59,10 @@ curl -X GET "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE_ID}/dn
 ```bash
 #!/bin/bash
 # Filename: /usr/local/sbin/cf-ddns.sh
+#
+# Add the below /etc/crontab entry to check periodically
+# Update CloudFlare DDNS records for lab.example.com every 5 mins
+# */5 *   * * *   nobody /usr/local/sbin/cf-ddns.sh
 
 export CLOUDFLARE_ZONE_ID='ZONE_ID'
 export CLOUDFLARE_API_TOKEN='API_TOKEN'
@@ -67,12 +78,3 @@ exec /usr/local/sbin/cf-ddns
 # Update CloudFlare DDNS records for lab.example.com every 5 mins
 */5 *   * * *   nobody /usr/local/sbin/cf-ddns.sh
 ```
-
-## How Does This Work?
-
-1. Get the public IP of the client using [Cloudflare Trace](https://cloudflare.com/cdn-cgi/trace).
-
-2. Get the current IP address of the DNS record using [Cloudflare DoH](https://developers.cloudflare.com/1.1.1.1/encryption/dns-over-https/make-api-requests/dns-json/).
-
-3. If the public IP and current IP are different, updated the DNS A record using the [Cloudflare API](https://developers.cloudflare.com/api/operations/dns-records-for-a-zone-patch-dns-record).
-
