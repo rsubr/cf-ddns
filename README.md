@@ -78,3 +78,12 @@ exec /usr/local/sbin/cf-ddns
 # Update CloudFlare DDNS records for lab.example.com every 5 mins
 */5 *   * * *   nobody /usr/local/sbin/cf-ddns.sh
 ```
+
+## Building
+
+`cf-ddns` uses only the Go standard library and can be built using the below command.
+
+```bash
+# Ensure you have go v1.23.0 or latter
+go build cf-ddns.go
+```
