@@ -22,7 +22,7 @@ Assume you want to update the DNS A record for `homelab.example.com` whenever yo
 
 1. Create DNS A record for `homelab.example.com` with a dummy default value and configure all the necessary Cloudflare settings for the record. `cf-ddns` will only update the IP address and not change any other setting for this record.
 
-2. Generate two [User API Tokens](dash.cloudflare.com/profile/api-tokens) with the following permissions:
+2. Generate two [User API Tokens](https://dash.cloudflare.com/profile/api-tokens) with the following permissions:
     - `DNS:Edit` for the zone containing the DNS record. eg. `example.com`
     - `DNS:Read` for the zone containing the DNS record. eg. `example.com`
 
