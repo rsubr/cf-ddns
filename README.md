@@ -39,7 +39,7 @@ Assume you want to update the DNS A record for `homelab.example.com` whenever yo
 
 ### Fetching the `dns_record_id`
 
-1. Use the DNS:Read token to fetch the `dns_record_id` for `lab.example.com`. Review the returned JSON response and save the `id` key for `lab.example.com` as `CLOUDFLARE_DNS_RECORD_ID` as this will be used by `cf-ddns` to update the DNS record.
+1. Use the DNS:Read token to fetch the `dns_record_id` for `homelab.example.com`. Review the returned JSON response and save the `id` key for `homelab.example.com` as `CLOUDFLARE_DNS_RECORD_ID` as this will be used by `cf-ddns` to update the DNS record.
 
 ```bash
 export CLOUDFLARE_ZONE_ID='ZONE_ID'
@@ -61,7 +61,7 @@ curl -X GET "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE_ID}/dn
 # Filename: /usr/local/sbin/cf-ddns.sh
 #
 # Add the below /etc/crontab entry to check periodically
-# Update CloudFlare DDNS records for lab.example.com every 5 mins
+# Update CloudFlare DDNS records for homelab.example.com every 5 mins
 # */5 *   * * *   nobody /usr/local/sbin/cf-ddns.sh
 
 export CLOUDFLARE_ZONE_ID='ZONE_ID'
@@ -75,7 +75,7 @@ exec /usr/local/sbin/cf-ddns
 3. Setup the following crontab entry to run `cf-ddns` every 5 minutes.
 
 ```cron
-# Update CloudFlare DDNS records for lab.example.com every 5 mins
+# Update CloudFlare DDNS records for homelab.example.com every 5 mins
 */5 *   * * *   nobody /usr/local/sbin/cf-ddns.sh
 ```
 
